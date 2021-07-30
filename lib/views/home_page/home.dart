@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    NotificationService().scheduleNotification();
   }
 
   var isInited = false;
@@ -71,16 +70,14 @@ class _HomePageState extends State<HomePage> {
                     physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                     itemBuilder: (context, index) {
                       return InkWell(
-                          child: CountDownItem(
-                            key: Key(provider.countdowns[index].id.toString()),
-                            countdown: provider.countdowns[index],
-                          ),
-                          onLongPress: () {
-                            showOptionsSheet(context, provider, index);
-                          },
-                          onTap: () {
-                            NotificationService().scheduleNotification();
-                          });
+                        child: CountDownItem(
+                          key: Key(provider.countdowns[index].id.toString()),
+                          countdown: provider.countdowns[index],
+                        ),
+                        onLongPress: () {
+                          showOptionsSheet(context, provider, index);
+                        },
+                      );
                     },
                     separatorBuilder: (context, index) => SizedBox(height: 15),
                   )
@@ -134,8 +131,10 @@ class _HomePageState extends State<HomePage> {
                   title: Text("Delete"),
                 ),
                 onTap: () async {
+                  await NotificationService().cancelNotification(provider.countdowns[index].id!);
                   await provider.deleteCountdown(provider.countdowns[index].id!);
                   await provider.getCountdowns();
+
                   Navigator.of(context).pop();
                 },
               ),

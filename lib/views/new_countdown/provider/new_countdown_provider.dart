@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:countdown/constant/color.dart';
 import 'package:countdown/database/database.dart';
 import 'package:countdown/models/countdown.dart';
+import 'package:countdown/service/notification/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class NewCountdownProvider extends ChangeNotifier {
-  Countdown? _needUpdateCountdown;
+  Countdown? _cdNeedUpdated;
 
   String? _name;
   set setName(String? name) => _name = name;
@@ -65,17 +66,19 @@ class NewCountdownProvider extends ChangeNotifier {
       isLoop: _isLoop,
     );
 
-    if (_needUpdateCountdown == null)
-      await DatabaseHelper().saveCountdown(countdown);
-    else {
-      countdown.id = _needUpdateCountdown!.id;
+    if (_cdNeedUpdated == null) {
+      int newId = await DatabaseHelper().newCountdown(countdown);
+      await NotificationService().scheduleNotification(id: newId, title: _name!, time: _date);
+    } else {
+      countdown.id = _cdNeedUpdated!.id;
       await DatabaseHelper().updateCountdown(countdown);
+      await NotificationService().scheduleNotification(id: countdown.id!, title: _name!, time: _date);
     }
   }
 
   setData(Countdown? countdown) {
     if (countdown != null) {
-      _needUpdateCountdown = countdown;
+      _cdNeedUpdated = countdown;
       _name = countdown.title;
       _date = countdown.date;
       _time = countdown.time;

@@ -40,14 +40,16 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<void> saveCountdown(Countdown newCountdown) async {
+  Future<int> newCountdown(Countdown newCountdown) async {
     Database? db = await database;
+    int idNewCountdown;
 
     try {
-      await db!.insert('COUNTDOWN', newCountdown.toMap());
+      idNewCountdown = await db!.insert('COUNTDOWN', newCountdown.toMap());
     } catch (e) {
       throw e;
     }
+    return idNewCountdown;
   }
 
   Future<void> updateCountdown(Countdown updatedCd) async {
