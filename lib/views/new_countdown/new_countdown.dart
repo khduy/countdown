@@ -43,11 +43,11 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
   }
 
   final _listColor = [
-    MColor.blue,
     MColor.red,
     MColor.orange,
     MColor.yellow,
     MColor.green,
+    MColor.blue,
     MColor.darkBlue,
     MColor.purple,
     MColor.grey,

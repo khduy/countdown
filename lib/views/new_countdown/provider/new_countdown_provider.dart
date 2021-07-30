@@ -14,7 +14,7 @@ class NewCountdownProvider extends ChangeNotifier {
 
   int _pickedColorIndex = 0;
   int get pickedColorIndex => _pickedColorIndex;
-  Color _color = MColor.blue;
+  Color _color = MColor.red;
 
   bool _isLoop = true;
   bool get isLoop => _isLoop;

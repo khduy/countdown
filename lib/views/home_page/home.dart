@@ -1,4 +1,5 @@
 import 'package:countdown/models/countdown.dart';
+import 'package:countdown/service/notification/notification_service.dart';
 import 'package:countdown/views/home_page/provider/home_provider.dart';
 import 'package:countdown/views/new_countdown/new_countdown.dart';
 import 'package:countdown/views/home_page/widgets/coundown_item.dart';
@@ -20,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    NotificationService().scheduleNotification();
   }
 
   var isInited = false;
@@ -68,56 +70,17 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(16),
                     physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        child: CountDownItem(
-                          key: Key(provider.countdowns[index].id.toString()),
-                          countdown: provider.countdowns[index],
-                        ),
-                        onLongPress: () {
-                          showBarModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SafeArea(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    InkWell(
-                                      child: ListTile(
-                                        leading: Icon(Icons.edit),
-                                        title: Text("Edit"),
-                                      ),
-                                      onTap: () async {
-                                        bool? rs = await showSheetNewCountdown(
-                                          context,
-                                          provider.countdowns[index],
-                                        );
-
-                                        if (rs ?? false) {
-                                          Navigator.of(context).pop();
-                                          await provider.getCountdowns();
-                                        }
-                                      },
-                                    ),
-                                    InkWell(
-                                      child: ListTile(
-                                        leading: Icon(Icons.delete),
-                                        title: Text("Delete"),
-                                      ),
-                                      onTap: () async {
-                                        await provider
-                                            .deleteCountdown(provider.countdowns[index].id!);
-                                        await provider.getCountdowns();
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      );
+                      return InkWell(
+                          child: CountDownItem(
+                            key: Key(provider.countdowns[index].id.toString()),
+                            countdown: provider.countdowns[index],
+                          ),
+                          onLongPress: () {
+                            showOptionsSheet(context, provider, index);
+                          },
+                          onTap: () {
+                            NotificationService().scheduleNotification();
+                          });
                     },
                     separatorBuilder: (context, index) => SizedBox(height: 15),
                   )
@@ -127,9 +90,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "You don't have any countdown. Let's create one.",
                         style: TextStyle(
-                          //fontFamily: 'PassionOne',
                           fontSize: 18,
-                          //letterSpacing: 0.2,
                           color: Colors.grey[600],
                         ),
                         textAlign: TextAlign.center,
@@ -139,6 +100,49 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+    );
+  }
+
+  showOptionsSheet(BuildContext context, HomeProvider provider, int index) {
+    showBarModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text("Edit"),
+                ),
+                onTap: () async {
+                  bool? rs = await showSheetNewCountdown(
+                    context,
+                    provider.countdowns[index],
+                  );
+
+                  if (rs ?? false) {
+                    Navigator.of(context).pop();
+                    await provider.getCountdowns();
+                  }
+                },
+              ),
+              InkWell(
+                child: ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text("Delete"),
+                ),
+                onTap: () async {
+                  await provider.deleteCountdown(provider.countdowns[index].id!);
+                  await provider.getCountdowns();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
