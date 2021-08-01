@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     if (!isInited) {
       isInited = true;
       await Provider.of<HomeProvider>(context, listen: false).getCountdowns();
-      Provider.of<HomeProvider>(context, listen: false).startTimer();
+      Provider.of<HomeProvider>(context, listen: false).initTimer();
     }
     super.didChangeDependencies();
   }

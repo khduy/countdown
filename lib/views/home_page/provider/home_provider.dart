@@ -21,7 +21,7 @@ class HomeProvider extends ChangeNotifier {
 
   Timer? _timer;
 
-  void startTimer() {
+  void initTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       for (int i = 0; i < _countdowns.length; i++) {
         if (_countdowns[i].secs == _countdowns[i].mins &&

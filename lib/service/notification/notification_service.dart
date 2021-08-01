@@ -4,6 +4,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   final androidPlatformChannelSpecifics = AndroidNotificationDetails(
     'cd_noti',
     'cd_noti',
@@ -50,16 +51,17 @@ class NotificationService {
       iOS: iOSPlatformChannelSpecifics,
     );
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      '$title has been shown, you can watch it now',
-      tz.TZDateTime.from(time, tz.local),
-      //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
-      platformChannelSpecifics,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-    );
+    if (time.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        'You can watch it now',
+        tz.TZDateTime.from(time, tz.local),
+        platformChannelSpecifics,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle: true,
+      );
+    }
   }
 
   Future<void> cancelNotification(int idNotification) async {
