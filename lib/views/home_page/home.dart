@@ -1,6 +1,7 @@
 import 'package:countdown/models/countdown.dart';
 import 'package:countdown/services/notification/notification_service.dart';
 import 'package:countdown/views/home_page/provider/home_provider.dart';
+import 'package:countdown/views/home_page/widgets/floating_model.dart';
 import 'package:countdown/views/new_countdown/new_countdown.dart';
 import 'package:countdown/views/home_page/widgets/coundown_item.dart';
 import 'package:countdown/views/new_countdown/provider/new_countdown_provider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -102,45 +104,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   showOptionsSheet(BuildContext context, HomeProvider provider, int index) {
-    showBarModalBottomSheet(
+    showFloatingModalBottomSheet(
       context: context,
       builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              InkWell(
-                child: ListTile(
-                  leading: Icon(Icons.edit),
-                  title: Text("Edit"),
-                ),
-                onTap: () async {
-                  bool? rs = await showSheetNewCountdown(
-                    context,
-                    provider.countdowns[index],
-                  );
-
-                  if (rs ?? false) {
-                    Navigator.of(context).pop();
-                    await provider.getCountdowns();
-                  }
-                },
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              child: ListTile(
+                leading: Icon(Icons.edit),
+                title: Text("Edit"),
               ),
-              InkWell(
-                child: ListTile(
-                  leading: Icon(Icons.delete),
-                  title: Text("Delete"),
-                ),
-                onTap: () async {
-                  await NotificationService().cancelNotification(provider.countdowns[index].id!);
-                  await provider.deleteCountdown(provider.countdowns[index].id!);
-                  await provider.getCountdowns();
+              onTap: () async {
+                bool? rs = await showSheetNewCountdown(
+                  context,
+                  provider.countdowns[index],
+                );
 
+                if (rs ?? false) {
                   Navigator.of(context).pop();
-                },
+                  await provider.getCountdowns();
+                }
+              },
+            ),
+            InkWell(
+              child: ListTile(
+                leading: Icon(Icons.delete),
+                title: Text("Delete"),
               ),
-            ],
-          ),
+              onTap: () async {
+                await NotificationService().cancelNotification(provider.countdowns[index].id!);
+                await provider.deleteCountdown(provider.countdowns[index].id!);
+                await provider.getCountdowns();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
