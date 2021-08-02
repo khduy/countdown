@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:countdown/constant/color.dart';
 import 'package:countdown/database/database.dart';
 import 'package:countdown/models/countdown.dart';
 import 'package:countdown/service/notification/notification_service.dart';
@@ -13,45 +12,37 @@ class NewCountdownProvider extends ChangeNotifier {
   set setName(String? name) => _name = name;
   String? get name => _name;
 
-  int _pickedColorIndex = 0;
-  int get pickedColorIndex => _pickedColorIndex;
-  Color _color = MColor.red;
+  Color? _color;
+  Color? get color => _color;
+  void pickColor(Color color) {
+    _color = color;
+  }
 
   bool _isLoop = true;
   bool get isLoop => _isLoop;
+  void setLoop(bool value) {
+    _isLoop = value;
+    notifyListeners();
+  }
 
   File? _backgroundPhoto;
   File? get backgroundPhoto => _backgroundPhoto;
-
-  var _time = TimeOfDay.now();
-  TimeOfDay get time => _time;
-
-  DateTime _date = DateTime.now();
-  DateTime get date => _date;
-
-  void pickColor(int pickedIndex, Color color) {
-    _pickedColorIndex = pickedIndex;
-    _color = color;
-    notifyListeners();
-  }
-
-  void pickDate(DateTime date) {
-    _date = date;
-    notifyListeners();
-  }
-
-  void pickTime(TimeOfDay time) {
-    _time = time;
-    notifyListeners();
-  }
-
   void pickPhoto(File photo) {
     _backgroundPhoto = photo;
     notifyListeners();
   }
 
-  void setLoop(bool value) {
-    _isLoop = value;
+  var _time = TimeOfDay.now();
+  TimeOfDay get time => _time;
+  void pickTime(TimeOfDay time) {
+    _time = time;
+    notifyListeners();
+  }
+
+  DateTime _date = DateTime.now();
+  DateTime get date => _date;
+  void pickDate(DateTime date) {
+    _date = date;
     notifyListeners();
   }
 
@@ -61,7 +52,7 @@ class NewCountdownProvider extends ChangeNotifier {
     var countdown = Countdown(
       title: _name!,
       datetime: _date,
-      color: _color,
+      color: _color!,
       photo: _backgroundPhoto?.readAsBytesSync(),
       isLoop: _isLoop,
     );
@@ -72,7 +63,11 @@ class NewCountdownProvider extends ChangeNotifier {
     } else {
       countdown.id = _cdNeedUpdated!.id;
       await DatabaseHelper().updateCountdown(countdown);
-      await NotificationService().scheduleNotification(id: countdown.id!, title: _name!, time: _date);
+      await NotificationService().scheduleNotification(
+        id: countdown.id!,
+        title: _name!,
+        time: _date,
+      );
     }
   }
 
@@ -82,7 +77,7 @@ class NewCountdownProvider extends ChangeNotifier {
       _name = countdown.title;
       _date = countdown.date;
       _time = countdown.time;
-      // set color ?
+      _color = countdown.color;
       _isLoop = countdown.isLoop;
       // if (countdown.photo != null) {
       //   _backgroundPhoto = File.fromRawPath(countdown.photo!);

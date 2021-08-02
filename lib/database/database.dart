@@ -55,7 +55,6 @@ class DatabaseHelper {
   Future<void> updateCountdown(Countdown updatedCd) async {
     Database? db = await database;
     await db!.update('COUNTDOWN', updatedCd.toMap(), where: "ID = ${updatedCd.id}");
-    print("update");
   }
 
   Future<void> deleteCountdown(int id) async {

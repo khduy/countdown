@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:countdown/constant/color.dart';
 import 'package:countdown/views/new_countdown/provider/new_countdown_provider.dart';
+import 'package:countdown/views/new_countdown/widgets/color_picker.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,18 +42,6 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
       titleController = TextEditingController(text: newCountdownProvider.name);
     }
   }
-
-  final _listColor = [
-    MColor.red,
-    MColor.orange,
-    MColor.yellow,
-    MColor.green,
-    MColor.blue,
-    MColor.darkBlue,
-    MColor.purple,
-    MColor.grey,
-    MColor.darkGrey,
-  ];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -100,8 +89,9 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                   SizedBox(height: 5),
                   TextFormField(
                     controller: titleController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     onChanged: (value) {
-                      Provider.of<NewCountdownProvider>(context, listen: false).setName = value;
+                      newCountdownProvider.setName = value;
                     },
                     style: TextStyle(fontSize: 15),
                     decoration: InputDecoration(
@@ -127,7 +117,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                   SizedBox(height: 5),
                   Row(
                     children: [
-                      // date picker ==================
+                      // ======================== date picker ==================
                       Expanded(
                         flex: 7,
                         child: GestureDetector(
@@ -151,21 +141,19 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                           onTap: () async {
                             var date = await DatePicker.showSimpleDatePicker(
                               context,
-                              initialDate:
-                                  Provider.of<NewCountdownProvider>(context, listen: false).date,
+                              initialDate: newCountdownProvider.date,
                               firstDate: DateTime.now(),
                               dateFormat: "dd-MMMM-yyyy",
                               looping: true,
                             );
                             if (date != null) {
-                              Provider.of<NewCountdownProvider>(context, listen: false)
-                                  .pickDate(date);
+                              newCountdownProvider.pickDate(date);
                             }
                           },
                         ),
                       ),
                       SizedBox(width: 15),
-                      // time picker ===================
+                      // ========================== time picker ===================
                       Expanded(
                         flex: 3,
                         child: GestureDetector(
@@ -189,12 +177,8 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                               showPicker(
                                 elevation: 1,
                                 is24HrFormat: true,
-                                value:
-                                    Provider.of<NewCountdownProvider>(context, listen: false).time,
-                                onChange: (TimeOfDay value) {
-                                  Provider.of<NewCountdownProvider>(context, listen: false)
-                                      .pickTime(value);
-                                },
+                                value: newCountdownProvider.time,
+                                onChange: newCountdownProvider.pickTime,
                               ),
                             );
                           },
@@ -202,49 +186,18 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                       ),
                     ],
                   ),
-
+                  // ========================= color picker ===================
                   SizedBox(height: 15),
                   Text('Color', style: titleTextStyle),
                   SizedBox(height: 5),
-                  // color picker ===================
-                  Container(
-                    height: 50,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _listColor.length,
-                      itemBuilder: (context, index) {
-                        return Consumer<NewCountdownProvider>(
-                          builder: (context, provider, child) {
-                            return GestureDetector(
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: _listColor[index],
-                                    ),
-                                  ),
-                                  if (index == provider.pickedColorIndex)
-                                    Icon(Icons.check, color: Colors.white),
-                                ],
-                              ),
-                              onTap: () {
-                                provider.pickColor(index, _listColor[index]);
-                              },
-                            );
-                          },
-                        );
-                      },
-                      separatorBuilder: (context, index) => SizedBox(width: 10),
-                    ),
+                  MColorPicker(
+                    initColor: newCountdownProvider.color,
+                    onPick: newCountdownProvider.pickColor,
                   ),
+                  // ========================== image picker ==================
                   SizedBox(height: 15),
                   Text('Background photo', style: titleTextStyle),
                   SizedBox(height: 5),
-                  // image picker ==================
                   GestureDetector(
                     child: Consumer<NewCountdownProvider>(
                       builder: (context, provider, child) => Container(
