@@ -213,7 +213,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                         child: provider.backgroundPhoto != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
-                                child: Image.file(
+                                child: Image.memory(
                                   provider.backgroundPhoto!,
                                   fit: BoxFit.cover,
                                 ),
@@ -278,7 +278,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
   _getFromGallery(BuildContext context) async {
     XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      final size = (await File(image.path).readAsBytes()).lengthInBytes / 1024 / 1024;
+      final size = (await File(image.path).readAsBytes()).lengthInBytes / 1024 / 1024; // to mb
       if (size < 2) {
         final photo = File(image.path);
         Provider.of<NewCountdownProvider>(context, listen: false).pickPhoto(photo);

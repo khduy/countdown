@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:countdown/models/countdown.dart';
 import 'package:countdown/services/database/database.dart';
@@ -25,10 +26,10 @@ class NewCountdownProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  File? _backgroundPhoto;
-  File? get backgroundPhoto => _backgroundPhoto;
+  Uint8List? _backgroundPhoto;
+  Uint8List? get backgroundPhoto => _backgroundPhoto;
   void pickPhoto(File photo) {
-    _backgroundPhoto = photo;
+    _backgroundPhoto = photo.readAsBytesSync();
     notifyListeners();
   }
 
@@ -53,7 +54,7 @@ class NewCountdownProvider extends ChangeNotifier {
       title: _name!,
       datetime: _date,
       color: _color!,
-      photo: _backgroundPhoto?.readAsBytesSync(),
+      photo: _backgroundPhoto,
       isLoop: _isLoop,
     );
 
@@ -79,9 +80,7 @@ class NewCountdownProvider extends ChangeNotifier {
       _time = countdown.time;
       _color = countdown.color;
       _isLoop = countdown.isLoop;
-      // if (countdown.photo != null) {
-      //   _backgroundPhoto = File.fromRawPath(countdown.photo!);
-      // }
+      _backgroundPhoto = countdown.photo ?? null;
     }
   }
 }
