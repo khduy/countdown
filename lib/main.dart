@@ -1,4 +1,4 @@
-import 'package:countdown/service/notification/notification_service.dart';
+import 'package:countdown/services/notification/notification_service.dart';
 import 'package:countdown/views/home_page/home.dart';
 import 'package:countdown/views/home_page/provider/home_provider.dart';
 import 'package:flutter/material.dart';

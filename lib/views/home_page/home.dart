@@ -1,5 +1,5 @@
 import 'package:countdown/models/countdown.dart';
-import 'package:countdown/service/notification/notification_service.dart';
+import 'package:countdown/services/notification/notification_service.dart';
 import 'package:countdown/views/home_page/provider/home_provider.dart';
 import 'package:countdown/views/new_countdown/new_countdown.dart';
 import 'package:countdown/views/home_page/widgets/coundown_item.dart';

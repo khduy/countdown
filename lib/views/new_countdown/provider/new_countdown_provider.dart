@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:countdown/database/database.dart';
 import 'package:countdown/models/countdown.dart';
-import 'package:countdown/service/notification/notification_service.dart';
+import 'package:countdown/services/database/database.dart';
+import 'package:countdown/services/notification/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class NewCountdownProvider extends ChangeNotifier {
