@@ -165,10 +165,18 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                             ),
                             child: Center(
                               child: Consumer<NewCountdownProvider>(
-                                builder: (context, provider, child) => Text(
-                                  '${provider.time.hour}:${provider.time.minute}',
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                ),
+                                builder: (context, provider, child) {
+                                  var hour = provider.time.hour < 10
+                                      ? "0${provider.time.hour}"
+                                      : "${provider.time.hour}";
+                                  var mins = provider.time.minute < 10
+                                      ? "0${provider.time.minute}"
+                                      : "${provider.time.minute}";
+                                  return Text(
+                                    '$hour:$mins',
+                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                  );
+                                },
                               ),
                             ),
                           ),
