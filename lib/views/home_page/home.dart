@@ -39,19 +39,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
       child: Scaffold(
         appBar: AppBar(
-          title: Logo(),
+          title: Text('Countdown', style: theme.textTheme.headline1),
           centerTitle: false,
-          backgroundColor: Colors.white,
+          backgroundColor: theme.primaryColor,
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: CupertinoButton(
                 padding: EdgeInsets.symmetric(horizontal: 25),
-                color: Colors.grey[400],
-                child: Icon(Icons.add),
+                color: theme.hoverColor,
+                child: Icon(Icons.add, color: theme.iconTheme.color),
                 onPressed: () async {
                   bool? rs = await showSheetNewCountdown(context);
                   if (rs ?? false) {
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         body: Consumer<HomeProvider>(
           builder: (context, provider, child) {
             return provider.countdowns.length > 0
@@ -71,15 +72,12 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(16),
                     physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        child: CountDownItem(
-                          key: Key(provider.countdowns[index].id.toString()),
-                          countdown: provider.countdowns[index],
-                        ),
+                      return CountDownItem(
+                        key: Key(provider.countdowns[index].id.toString()),
+                        countdown: provider.countdowns[index],
                         onLongPress: () {
                           showOptionsSheet(context, provider, index);
                         },
-                        
                       );
                     },
                     separatorBuilder: (context, index) => SizedBox(height: 15),
@@ -113,7 +111,10 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               child: ListTile(
                 leading: Icon(Icons.edit),
-                title: Text("Edit"),
+                title: Text(
+                  "Edit",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
               ),
               onTap: () async {
                 bool? rs = await showSheetNewCountdown(
@@ -130,7 +131,10 @@ class _HomePageState extends State<HomePage> {
             InkWell(
               child: ListTile(
                 leading: Icon(Icons.delete),
-                title: Text("Delete"),
+                title: Text(
+                  "Delete",
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
               ),
               onTap: () async {
                 await NotificationService().cancelNotification(provider.countdowns[index].id!);
@@ -152,24 +156,6 @@ class _HomePageState extends State<HomePage> {
       builder: (context) => ChangeNotifierProvider(
         create: (_) => NewCountdownProvider()..setData(countdown),
         child: NewCountdownPage(),
-      ),
-    );
-  }
-}
-
-class Logo extends StatelessWidget {
-  const Logo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Countdown',
-      style: TextStyle(
-        fontFamily: 'Anton',
-        fontSize: 30,
-        color: Colors.black,
       ),
     );
   }

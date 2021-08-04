@@ -20,11 +20,6 @@ class NewCountdownPage extends StatefulWidget {
 }
 
 class _NewCountdownPageState extends State<NewCountdownPage> {
-  final titleTextStyle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
-
   late final NewCountdownProvider newCountdownProvider;
   late final titleController;
   bool isInit = true;
@@ -51,20 +46,14 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: theme.backgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'New Countdown',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
+          backgroundColor: theme.primaryColor,
+          title: Text('New Countdown', style: theme.textTheme.headline2),
           centerTitle: true,
           automaticallyImplyLeading: false,
           actions: [
@@ -85,7 +74,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Title', style: titleTextStyle),
+                  Text('Title', style: theme.textTheme.bodyText1),
                   SizedBox(height: 5),
                   TextFormField(
                     controller: titleController,
@@ -93,14 +82,14 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                     onChanged: (value) {
                       newCountdownProvider.setName = value;
                     },
-                    style: TextStyle(fontSize: 15),
+                    style: theme.textTheme.bodyText2,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(horizontal: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide.none,
                       ),
-                      fillColor: Color(0xfff5f7f9),
+                      fillColor: theme.hoverColor,
                       filled: true,
                       hintText: 'The title of the countdown',
                       hintStyle: TextStyle(fontSize: 15),
@@ -113,7 +102,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                     },
                   ),
                   SizedBox(height: 15),
-                  Text('Date & Time', style: titleTextStyle),
+                  Text('Date & Time', style: theme.textTheme.bodyText1),
                   SizedBox(height: 5),
                   Row(
                     children: [
@@ -124,7 +113,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                           child: Container(
                             padding: EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: Color(0xfff5f7f9),
+                              color: theme.hoverColor,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
@@ -132,7 +121,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                                 builder: (context, provider, child) {
                                   return Text(
                                     _formatter.format(provider.date),
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                    style: theme.textTheme.bodyText2,
                                   );
                                 },
                               ),
@@ -145,6 +134,9 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                               firstDate: DateTime.now(),
                               dateFormat: "dd-MMMM-yyyy",
                               looping: true,
+                              backgroundColor: theme.primaryColor,
+                              textColor: theme.accentColor,
+                              itemTextStyle: theme.textTheme.bodyText1,
                             );
                             if (date != null) {
                               newCountdownProvider.pickDate(date);
@@ -160,7 +152,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                           child: Container(
                             padding: EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                              color: Color(0xfff5f7f9),
+                              color: theme.hoverColor,
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
@@ -174,7 +166,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                                       : "${provider.time.minute}";
                                   return Text(
                                     '$hour:$mins',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                    style: theme.textTheme.bodyText2,
                                   );
                                 },
                               ),
@@ -186,7 +178,12 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                                 elevation: 1,
                                 is24HrFormat: true,
                                 value: newCountdownProvider.time,
+                                accentColor: MColor.blue,
                                 onChange: newCountdownProvider.pickTime,
+                                okCancelStyle: TextStyle(
+                                  color: theme.accentColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             );
                           },
@@ -196,7 +193,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                   ),
                   // ========================= color picker ===================
                   SizedBox(height: 15),
-                  Text('Color', style: titleTextStyle),
+                  Text('Color', style: theme.textTheme.bodyText1),
                   SizedBox(height: 5),
                   MColorPicker(
                     initColor: newCountdownProvider.color,
@@ -204,7 +201,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                   ),
                   // ========================== image picker ==================
                   SizedBox(height: 15),
-                  Text('Background photo', style: titleTextStyle),
+                  Text('Background photo', style: theme.textTheme.bodyText1),
                   SizedBox(height: 5),
                   GestureDetector(
                     child: Consumer<NewCountdownProvider>(
@@ -215,7 +212,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                           minWidth: double.infinity,
                         ),
                         decoration: BoxDecoration(
-                          color: Color(0xfff5f7f9),
+                          color: theme.hoverColor,
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: provider.backgroundPhoto != null
@@ -236,7 +233,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                   SizedBox(height: 15),
                   Row(
                     children: [
-                      Text("Loop", style: titleTextStyle),
+                      Text("Loop", style: theme.textTheme.bodyText1),
                       Spacer(),
                       Consumer<NewCountdownProvider>(
                         builder: (context, provider, child) {
@@ -251,8 +248,8 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                     ],
                   ),
                   Text(
-                    "automatically add 7 days at the end of the countdown",
-                    style: TextStyle(color: Colors.black54),
+                    "Automatically add 7 days at the end of the countdown",
+                    style: theme.textTheme.subtitle2,
                   ),
                   SizedBox(height: 30),
                   SizedBox(
