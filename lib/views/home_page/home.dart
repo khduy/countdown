@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             InkWell(
               child: ListTile(
-                leading: Icon(Icons.edit),
+                trailing: Icon(Icons.edit),
                 title: Text(
                   "Edit",
                   style: Theme.of(context).textTheme.bodyText2,
@@ -128,12 +128,22 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            Divider(
+              height: 0.2,
+              thickness: 0.2,
+              indent: 0,
+              endIndent: 0,
+              color: Theme.of(context).accentColor,
+            ),
             InkWell(
               child: ListTile(
-                leading: Icon(Icons.delete),
+                trailing: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ),
                 title: Text(
                   "Delete",
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyText2!.apply(color: Colors.red),
                 ),
               ),
               onTap: () async {
