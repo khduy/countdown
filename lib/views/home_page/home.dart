@@ -109,11 +109,17 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
-              child: ListTile(
-                trailing: Icon(Icons.edit),
-                title: Text(
-                  "Edit",
-                  style: Theme.of(context).textTheme.bodyText2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Edit",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Spacer(),
+                    Icon(Icons.edit_outlined),
+                  ],
                 ),
               ),
               onTap: () async {
@@ -129,21 +135,27 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             Divider(
-              height: 0.2,
-              thickness: 0.2,
+              height: 0.1,
+              thickness: 0.1,
               indent: 0,
               endIndent: 0,
               color: Theme.of(context).accentColor,
             ),
             InkWell(
-              child: ListTile(
-                trailing: Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-                title: Text(
-                  "Delete",
-                  style: Theme.of(context).textTheme.bodyText2!.apply(color: Colors.red),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      "Delete",
+                      style: Theme.of(context).textTheme.bodyText2!.apply(color: Colors.red),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.delete_outline,
+                      color: Colors.red,
+                    ),
+                  ],
                 ),
               ),
               onTap: () async {

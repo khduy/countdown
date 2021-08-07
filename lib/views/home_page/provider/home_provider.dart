@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:countdown/models/countdown.dart';
 import 'package:countdown/services/database/database.dart';
-import 'package:countdown/services/notification/notification_service.dart';
+//import 'package:countdown/services/notification/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -34,11 +34,12 @@ class HomeProvider extends ChangeNotifier {
             );
 
             DatabaseHelper().updateCountdown(updatedCd).then((value) => getCountdowns());
-            NotificationService().scheduleNotification(
-              id: updatedCd.id!,
-              title: updatedCd.title,
-              time: updatedCd.datetime,
-            );
+            // NotificationService().scheduleNotification(
+            //   id: updatedCd.id!,
+            //   title: updatedCd.title,
+            //   time: updatedCd.datetime,
+            //   isRepeat: updatedCd.isLoop,
+            // );
           }
         } else if (_countdowns[i].secs > 0) {
           _countdowns[i].secs--;

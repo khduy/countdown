@@ -47,13 +47,14 @@ class NotificationService {
     required int id,
     required String title,
     required DateTime time,
+    required bool isRepeat,
   }) async {
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
     );
 
-    if (time.isAfter(DateTime.now())) {
+    
       await flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
@@ -62,9 +63,10 @@ class NotificationService {
         platformChannelSpecifics,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true,
+        matchDateTimeComponents: isRepeat ? DateTimeComponents.dayOfWeekAndTime : null,
       );
       log("notification schedule at $time");
-    }
+    
   }
 
   Future<void> cancelNotification(int idNotification) async {

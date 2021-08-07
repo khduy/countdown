@@ -60,7 +60,12 @@ class NewCountdownProvider extends ChangeNotifier {
 
     if (_cdNeedUpdated == null) {
       int newId = await DatabaseHelper().newCountdown(countdown);
-      await NotificationService().scheduleNotification(id: newId, title: _name!, time: _date);
+      await NotificationService().scheduleNotification(
+        id: newId,
+        title: _name!,
+        time: _date,
+        isRepeat: _isLoop,
+      );
     } else {
       countdown.id = _cdNeedUpdated!.id;
       await DatabaseHelper().updateCountdown(countdown);
@@ -68,6 +73,7 @@ class NewCountdownProvider extends ChangeNotifier {
         id: countdown.id!,
         title: _name!,
         time: _date,
+        isRepeat: _isLoop,
       );
     }
   }
