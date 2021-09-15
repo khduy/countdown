@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:countdown/models/countdown.dart';
+import '../../../models/countdown.dart';
 import 'package:flutter/material.dart';
 
 class CountDownItem extends StatelessWidget {
@@ -126,7 +126,7 @@ class CountDownItem extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Row(
-                    children: [
+                    children: const [
                       Expanded(
                         child: Divider(
                           color: Colors.white,

@@ -1,10 +1,12 @@
-import 'package:countdown/models/countdown.dart';
-import 'package:countdown/services/notification/notification_service.dart';
-import 'package:countdown/views/home_page/provider/home_provider.dart';
-import 'package:countdown/views/home_page/widgets/floating_model.dart';
-import 'package:countdown/views/new_countdown/new_countdown.dart';
-import 'package:countdown/views/home_page/widgets/coundown_item.dart';
-import 'package:countdown/views/new_countdown/provider/new_countdown_provider.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+
+import '../../models/countdown.dart';
+import '../../services/notification/notification_service.dart';
+import 'provider/home_provider.dart';
+import 'widgets/floating_model.dart';
+import '../new_countdown/new_countdown.dart';
+import 'widgets/coundown_item.dart';
+import '../new_countdown/provider/new_countdown_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -23,6 +25,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) AwesomeNotifications().requestPermissionToSendNotifications();
+    });
   }
 
   var isInited = false;
@@ -32,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     if (!isInited) {
       isInited = true;
       await Provider.of<HomeProvider>(context, listen: false).getCountdowns();
-      Provider.of<HomeProvider>(context, listen: false).initTimer();
+      Provider.of<HomeProvider>(context, listen: false).startTimer();
     }
     super.didChangeDependencies();
   }
@@ -66,7 +71,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: theme.backgroundColor,
         body: Consumer<HomeProvider>(
           builder: (context, provider, child) {
-            return provider.countdowns.length > 0
+            return provider.countdowns.isNotEmpty
                 ? ListView.separated(
                     itemCount: provider.countdowns.length,
                     padding: const EdgeInsets.all(16),
@@ -139,7 +144,7 @@ class _HomePageState extends State<HomePage> {
               thickness: 0.1,
               indent: 0,
               endIndent: 0,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             InkWell(
               child: Padding(

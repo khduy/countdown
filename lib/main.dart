@@ -1,20 +1,26 @@
-import 'package:countdown/services/notification/notification_service.dart';
-import 'package:countdown/views/home_page/home.dart';
-import 'package:countdown/views/home_page/provider/home_provider.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
+import 'src/services/notification/notification_service.dart';
+import 'src/views/home_page/home.dart';
+import 'src/views/home_page/provider/home_provider.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().init();
+  NotificationService().init();
+  if (Platform.isIOS) {
+    NotificationService().clearBadge();
+  }
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final lightTheme = ThemeData.light().copyWith(
     primaryColor: Colors.white,
-    accentColor: Colors.black.withOpacity(0.87),
+    colorScheme: ThemeData.light().colorScheme.copyWith(secondary: Colors.black.withOpacity(0.87)),
     backgroundColor: Color(0xfffafafa),
     hoverColor: Color(0xffe3e6e9),
     iconTheme: IconThemeData(color: Colors.black54),
@@ -48,7 +54,7 @@ class MyApp extends StatelessWidget {
 
   final darkTheme = ThemeData.dark().copyWith(
     primaryColor: Color(0xff242526),
-    accentColor: Colors.white.withOpacity(0.87),
+    colorScheme: ThemeData.dark().colorScheme.copyWith(secondary: Colors.white.withOpacity(0.87)),
     backgroundColor: Color(0xff18191a),
     hoverColor: Color(0xff3a3b3c),
     primaryColorLight: Colors.white.withOpacity(0.87),
@@ -80,6 +86,8 @@ class MyApp extends StatelessWidget {
       ),
     ),
   );
+
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,16 @@
-import 'package:countdown/constant/color.dart';
+import '../../../../config/color.dart';
+
+
+
+
 import 'package:flutter/material.dart';
 
 class MColorPicker extends StatefulWidget {
-  MColorPicker({
+  const MColorPicker({Key? key, 
     required this.onPick,
     this.initColor,
     this.height = 50,
-  });
+  }) : super(key: key);
 
   final int height;
   final Function(Color) onPick;
@@ -41,7 +45,7 @@ class _MColorPickerState extends State<MColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 50,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
@@ -59,7 +63,7 @@ class _MColorPickerState extends State<MColorPicker> {
                     color: listColors[index],
                   ),
                 ),
-                if (index == pickedIndex) Icon(Icons.check, color: Colors.white),
+                if (index == pickedIndex) const Icon(Icons.check, color: Colors.white),
               ],
             ),
             onTap: () {
@@ -70,7 +74,7 @@ class _MColorPickerState extends State<MColorPicker> {
             },
           );
         },
-        separatorBuilder: (context, index) => SizedBox(width: 10),
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
       ),
     );
   }
