@@ -1,8 +1,12 @@
 import 'dart:io';
 
-import 'package:countdown/constant/color.dart';
-import 'package:countdown/views/new_countdown/provider/new_countdown_provider.dart';
-import 'package:countdown/views/new_countdown/widgets/color_picker.dart';
+
+import '../../../config/color.dart';
+
+
+
+import 'provider/new_countdown_provider.dart';
+import 'widgets/color_picker.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +17,7 @@ import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:provider/provider.dart';
 
 class NewCountdownPage extends StatefulWidget {
-  NewCountdownPage({Key? key}) : super(key: key);
+  const NewCountdownPage({Key? key}) : super(key: key);
 
   @override
   _NewCountdownPageState createState() => _NewCountdownPageState();
@@ -21,7 +25,7 @@ class NewCountdownPage extends StatefulWidget {
 
 class _NewCountdownPageState extends State<NewCountdownPage> {
   late final NewCountdownProvider newCountdownProvider;
-  late final titleController;
+  late final TextEditingController titleController;
   bool isInit = true;
   @override
   void initState() {
@@ -135,7 +139,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                               dateFormat: "dd-MMMM-yyyy",
                               looping: true,
                               backgroundColor: theme.primaryColor,
-                              textColor: theme.accentColor,
+                              textColor: theme.colorScheme.secondary,
                               itemTextStyle: theme.textTheme.bodyText1,
                             );
                             if (date != null) {
@@ -181,7 +185,7 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
                                 accentColor: MColor.blue,
                                 onChange: newCountdownProvider.pickTime,
                                 okCancelStyle: TextStyle(
-                                  color: theme.accentColor,
+                                  color: theme.colorScheme.secondary,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -289,9 +293,9 @@ class _NewCountdownPageState extends State<NewCountdownPage> {
         Provider.of<NewCountdownProvider>(context, listen: false).pickPhoto(photo);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('This photo is too big, only photos smaller than 2MB can be saved'),
-            duration: const Duration(seconds: 3),
+          const SnackBar(
+            content: Text('This photo is too big, only photos smaller than 2MB can be saved'),
+            duration: Duration(seconds: 3),
           ),
         );
       }

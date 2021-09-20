@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:countdown/models/countdown.dart';
-import 'package:countdown/services/database/database.dart';
-import 'package:countdown/services/notification/notification_service.dart';
 import 'package:flutter/material.dart';
+
+import '../../../models/countdown.dart';
+import '../../../services/database/database.dart';
+import '../../../services/notification/notification_service.dart';
 
 class NewCountdownProvider extends ChangeNotifier {
   Countdown? _cdNeedUpdated;
@@ -63,7 +64,7 @@ class NewCountdownProvider extends ChangeNotifier {
       await NotificationService().scheduleNotification(
         id: newId,
         title: _name!,
-        time: _date,
+        datetime: _date,
         isRepeat: _isLoop,
       );
     } else {
@@ -72,7 +73,7 @@ class NewCountdownProvider extends ChangeNotifier {
       await NotificationService().scheduleNotification(
         id: countdown.id!,
         title: _name!,
-        time: _date,
+        datetime: _date,
         isRepeat: _isLoop,
       );
     }
@@ -86,7 +87,7 @@ class NewCountdownProvider extends ChangeNotifier {
       _time = countdown.time;
       _color = countdown.color;
       _isLoop = countdown.isLoop;
-      _backgroundPhoto = countdown.photo ?? null;
+      _backgroundPhoto = countdown.photo;
     }
   }
 }

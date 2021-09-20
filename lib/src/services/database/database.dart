@@ -1,4 +1,4 @@
-import 'package:countdown/models/countdown.dart';
+import '../../models/countdown.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -44,11 +44,8 @@ class DatabaseHelper {
     Database? db = await database;
     int idNewCountdown;
 
-    try {
-      idNewCountdown = await db!.insert('COUNTDOWN', newCountdown.toMap());
-    } catch (e) {
-      throw e;
-    }
+    idNewCountdown = await db!.insert('COUNTDOWN', newCountdown.toMap());
+
     return idNewCountdown;
   }
 
@@ -68,9 +65,9 @@ class DatabaseHelper {
 
     var rs = await db!.query('COUNTDOWN', orderBy: 'DATETIME ASC');
 
-    rs.forEach((map) {
+    for (var map in rs) {
       countdowns.add(Countdown.fromMap(map));
-    });
+    }
 
     return countdowns;
   }
